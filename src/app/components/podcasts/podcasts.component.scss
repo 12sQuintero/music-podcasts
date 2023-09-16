@@ -1,0 +1,11 @@
+.filter {
+  margin-bottom: 10rem;
+}
+.podcasts {
+  row-gap: 10rem;
+}
+.podcast {
+  &__img {
+    margin-top: -7rem;
+  }
+}
