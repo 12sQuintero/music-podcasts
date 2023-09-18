@@ -8,6 +8,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PrimengModule } from './shared/modules/primeng/primeng.module';
 import { PodcastsComponent } from './components/podcasts/podcasts.component';
+import { PodcastsFilterPipe } from './pipes/podcasts-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { PodcastsComponent } from './components/podcasts/podcasts.component';
     HomeComponent,
     NavbarComponent,
     PodcastsComponent,
+    PodcastsFilterPipe,
   ],
   imports: [PrimengModule, BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
