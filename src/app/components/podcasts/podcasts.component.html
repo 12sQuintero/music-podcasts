@@ -1,1 +1,31 @@
-<p>podcasts works!</p>
+<div class="flex col justify-content-end align-items-center filter">
+  <!-- ===================================================================== -->
+  <!-- counter -->
+  <!-- ===================================================================== -->
+  <p-tag [value]="podcasts.length??0" class="mr-2" styleClass="text-xl"></p-tag>
+  <!-- ===================================================================== -->
+  <!-- input filter -->
+  <!-- ===================================================================== -->
+  <input #filter type="text" pInputText placeholder="Filter podcasts..." />
+</div>
+<!-- ======================================================================= -->
+<!-- podcasts list -->
+<!-- ======================================================================= -->
+<div class="flex flex-wrap col justify-content-center align-items-start podcasts">
+  <div *ngFor="let podcast of podcasts" class="flex flex-wrap col-12 sm:col-6 md:col-4 lg:col-3 justify-content-center">
+
+    <article class=" flex flex-wrap col-12 podcast shadow-2 justify-content-center ">
+      <figure class=" m-0 flex col-12  justify-content-center ">
+        <img [src]="podcast.image" [alt]="podcast.artist+' image'" class="border-circle podcast__img">
+      </figure>
+      <header>
+        <h3 class="text-center mb-3 ">{{podcast.name | uppercase}}</h3>
+        <h5 class="text-center m-0 text-color-secondary ">Author: {{podcast.artist}}</h5>
+      </header>
+    </article>
+
+  </div>
+</div>
+
+<router-outlet>
+</router-outlet>
