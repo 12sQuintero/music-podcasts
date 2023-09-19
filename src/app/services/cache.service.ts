@@ -36,7 +36,17 @@ export class CacheService {
     return null;
   }
 
+  /**
+   * get podcasts by cache
+   */
   get podcastsCache(): any {
     return this.getCacheDataKey(environment.CACHE_PODCAST_KEY);
+  }
+  /**
+   * @param id podcast id
+   * @returns details of podcast by cache
+   */
+  getDetailsCache(id: string): any {
+    return this.getCacheDataKey(id);
   }
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CacheService } from './cache.service';
 import { environment } from '../../environments/environment.development';
-import { map, of, shareReplay } from 'rxjs';
+import { Observable, map, of, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +20,45 @@ export class PodcastsService {
     return of(podcastCache);
   }
 
+  getPodcastsDetails(id: string): Observable<any> {
+    const detailsCache = this.cacheService.getDetailsCache(id);
+
+    //not cacheded-details
+    if (!detailsCache) return this.requestHttPodcastsDetails(id);
+
+    return of(detailsCache);
+  }
+
   requestPodcasts() {
     return this.http.get<any>(environment.URL_PODCAST).pipe(
       shareReplay(1),
       //parse info to better usage
       map((response) => this.parsePodcasts(response.feed.entry))
     );
+  }
+
+  private requestHttPodcastsDetails(id: string): Observable<{
+    podcast: any;
+    episodes: any;
+  }> {
+    return this.http
+      .get(
+        `https://api.allorigins.win/get?url=${encodeURIComponent(
+          environment.URL_DETAILS(id)
+        )}`
+      )
+      .pipe(
+        map((data: any) => {
+          const podcastDetails = JSON.parse(data.contents).results;
+
+          const [podcast, ...episodes] = podcastDetails;
+
+          return {
+            podcast,
+            episodes,
+          };
+        })
+      );
   }
 
   private parsePodcasts(list: any): any {

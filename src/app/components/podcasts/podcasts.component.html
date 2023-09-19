@@ -15,7 +15,8 @@
   <div *ngFor="let podcast of podcasts|podcastsFilter:filter.value"
     class="flex flex-wrap col-12 sm:col-6 md:col-4 lg:col-3 justify-content-center">
 
-    <article class=" flex flex-wrap col-12 podcast shadow-2 justify-content-center ">
+    <article [routerLink]="['podcast',podcast.id]" routerLinkActive="router-link-active"
+      class="flex flex-wrap col-12  shadow-2 justify-content-center podcast">
       <figure class=" m-0 flex col-12  justify-content-center ">
         <img [src]="podcast.image" [alt]="podcast.artist+' image'" class="border-circle podcast__img">
       </figure>
