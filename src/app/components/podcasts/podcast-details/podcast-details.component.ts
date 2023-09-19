@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {
+  EpisodeDetailInterface,
+  PodcastInterface,
+} from 'src/app/interfaces/podcast';
 import { PodcastsService } from 'src/app/services/podcasts.service';
 
 @Component({
@@ -14,7 +18,7 @@ export class PodcastDetailsComponent {
   ) {}
 
   podcast?: any;
-  episodes?: any[];
+  episodes?: EpisodeDetailInterface[];
 
   ngOnInit() {
     this.route.params.subscribe((params) => {

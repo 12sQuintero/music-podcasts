@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import {
+  EpisodeDetailInterface,
+  PodcastInterface,
+} from '../interfaces/podcast';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +16,7 @@ export class CacheService {
    * @param data data to store
    * @param key key of data
    */
-  setCacheData(data: any, key: string = environment.CACHE_PODCAST_KEY): void {
+  private setCacheData(data: any, key: string): void {
     const cache = JSON.parse(localStorage.getItem(key) ?? '{}');
 
     cache[key] = {
@@ -27,7 +31,7 @@ export class CacheService {
    * @param key cache key
    * @returns localStoraged date with the key, null when no data
    */
-  getCacheDataKey(key: string): undefined | null {
+  private getCacheDataKey(key: string): undefined | null {
     const cache = JSON.parse(localStorage.getItem(key) ?? '{}');
 
     if (cache && cache[key] && cache[key].expiry > Date.now()) {
@@ -48,5 +52,24 @@ export class CacheService {
    */
   getDetailsCache(id: string): any {
     return this.getCacheDataKey(id);
+  }
+  /**
+   * set podcasts cache
+   */
+  setPodcatsCache(podcasts: PodcastInterface[]): void {
+    this.setCacheData(podcasts, environment.CACHE_PODCAST_KEY);
+  }
+
+  /**
+   * set podcasts details cache by podcasts id
+   */
+  setPodcatsDetailsCache(details: {
+    podcast: PodcastInterface;
+    episodes: EpisodeDetailInterface;
+  }): void {
+    const {
+      podcast: { collectionId: podcastId },
+    } = details;
+    this.setCacheData(details, podcastId.toString());
   }
 }

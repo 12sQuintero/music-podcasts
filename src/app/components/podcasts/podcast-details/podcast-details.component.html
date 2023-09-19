@@ -1,3 +1,49 @@
-<router-outlet>
+<div *ngIf="podcast && episodes" class="flex flex-wrap col justify-content-between align-content-start">
+  <!-- ======================================================================= -->
+  <!-- podcast info -->
+  <!-- ======================================================================= -->
+  <article class="flex col-3">
+    <div class="flex flex-wrap col-12 shadow-4 justify-content-center">
+      <div class="flex col-8">
+        <img [src]="podcast.artworkUrl600" class="w-full border-round">
+      </div>
+      <p-divider class="w-full"></p-divider>
+      <!-- ================================================================= -->
+      <!-- TITLE -->
+      <!-- ================================================================= -->
+      <div class="flex flex-wrap col-12 pl-3">
+        <div class="flex col-12 p-0">
+          <h3 class="m-0 ">{{podcast.collectionName | uppercase}}</h3>
+        </div>
+        <div class="flex col-12 p-0">
+          <span class="text-center m-0 "> <i>
+              by {{podcast.artistName}}
+            </i> </span>
+        </div>
+      </div>
 
+      <p-divider class="w-full"></p-divider>
+      <!-- ================================================================= -->
+      <!-- DESCRIPTION -->
+      <!-- ================================================================= -->
+      <div class="flex flex-wrap col-12">
+        <div class="flex col-12 p-0">
+          <h5 class="m-0 ">Description:</h5>
+        </div>
+        <div class="flex col-12 p-0">
+          <span class=" m-0 "> <i>
+              <!-- {{ by {{podcast.artistName}}}} -->
+            </i> </span>
+        </div>
+      </div>
+    </div>
+  </article>
+  <div class="flex col-7"></div>
+
+
+
+</div>
+
+
+<router-outlet>
 </router-outlet>

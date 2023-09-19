@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 import { CacheService } from './cache.service';
 import { environment } from '../../environments/environment.development';
 import { Observable, map, of, shareReplay } from 'rxjs';
+import {
+  EpisodeDetailInterface,
+  PodcastInterface,
+} from '../interfaces/podcast';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +24,10 @@ export class PodcastsService {
     return of(podcastCache);
   }
 
-  getPodcastsDetails(id: string): Observable<any> {
+  getPodcastsDetails(id: string): Observable<{
+    podcast: any;
+    episodes: EpisodeDetailInterface;
+  }> {
     const detailsCache = this.cacheService.getDetailsCache(id);
 
     //not cacheded-details
@@ -29,11 +36,18 @@ export class PodcastsService {
     return of(detailsCache);
   }
 
-  requestPodcasts() {
+  private requestPodcasts() {
     return this.http.get<any>(environment.URL_PODCAST).pipe(
       shareReplay(1),
       //parse info to better usage
-      map((response) => this.parsePodcasts(response.feed.entry))
+      map((response) => {
+        const podcasts = this.parsePodcasts(response.feed.entry);
+        //cache data
+        this.cacheService.setPodcatsCache(podcasts);
+        return podcasts;
+      })
+
+      // map((response) => this.cacheService.setPodcatsCache(response))
     );
   }
 
@@ -48,10 +62,20 @@ export class PodcastsService {
         )}`
       )
       .pipe(
+        shareReplay(1),
+
         map((data: any) => {
           const podcastDetails = JSON.parse(data.contents).results;
 
           const [podcast, ...episodes] = podcastDetails;
+
+          //cache data
+          console.log('cache podcasts', podcast);
+
+          this.cacheService.setPodcatsDetailsCache({
+            podcast,
+            episodes,
+          });
 
           return {
             podcast,
