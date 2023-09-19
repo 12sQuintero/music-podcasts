@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CacheService } from './cache.service';
 import { environment } from '../../environments/environment.development';
-import { map, of } from 'rxjs';
+import { map, of, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +21,10 @@ export class PodcastsService {
   }
 
   requestPodcasts() {
-    return (
-      this.http
-        .get<any>(environment.URL_PODCAST)
-        //parse info to better usage
-        .pipe(map((response) => this.parsePodcasts(response.feed.entry)))
+    return this.http.get<any>(environment.URL_PODCAST).pipe(
+      shareReplay(1),
+      //parse info to better usage
+      map((response) => this.parsePodcasts(response.feed.entry))
     );
   }
 
