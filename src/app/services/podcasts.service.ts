@@ -24,24 +24,33 @@ export class PodcastsService {
     return of(podcastCache);
   }
 
-  getPodcastsDetails(id: string): Observable<{
-    podcast: any;
-    episodes: EpisodeDetailInterface;
-  }> {
-    const detailsCache = this.cacheService.getDetailsCache(id);
+  getPodcast(podcastId: number | string): Observable<PodcastInterface[]> {
+    const podcastCache = this.cacheService.podcastsCache;
+
+    //not cacheded
+    if (!podcastCache) return this.requestPodcasts(podcastId.toString());
+
+    //cached
+    return of(this.filterPodcastsListById(podcastCache, podcastId.toString()));
+  }
+
+  getPodcastsDetails(
+    podcastId: string
+  ): Observable<{ episodes: EpisodeDetailInterface }> {
+    const detailsCache = this.cacheService.getDetailsCache(podcastId);
 
     //not cacheded-details
-    if (!detailsCache) return this.requestHttPodcastsDetails(id);
+    if (!detailsCache) return this.requestHttPodcastsDetails(podcastId);
 
     return of(detailsCache);
   }
 
-  private requestPodcasts() {
+  private requestPodcasts(podcastId?: string) {
     return this.http.get<any>(environment.URL_PODCAST).pipe(
       shareReplay(1),
       //parse info to better usage
       map((response) => {
-        const podcasts = this.parsePodcasts(response.feed.entry);
+        const podcasts = this.parsePodcasts(response.feed.entry, podcastId);
         //cache data
         this.cacheService.setPodcatsCache(podcasts);
         return podcasts;
@@ -52,7 +61,6 @@ export class PodcastsService {
   }
 
   private requestHttPodcastsDetails(id: string): Observable<{
-    podcast: any;
     episodes: any;
   }> {
     return this.http
@@ -69,26 +77,23 @@ export class PodcastsService {
 
           const [podcast, ...episodes] = podcastDetails;
 
-          //cache data
-          console.log('cache podcasts', podcast);
+          console.log('cache podcast episodes', episodes);
 
+          //cache data episodes
           this.cacheService.setPodcatsDetailsCache({
             podcast,
             episodes,
           });
 
-          return {
-            podcast,
-            episodes,
-          };
+          return {episodes};
         })
       );
   }
 
-  private parsePodcasts(list: any): any {
+  private parsePodcasts(list: any, podcastId?: string): any {
     if (!list) return null;
 
-    const podcasts = list.map((podcasts: any) => {
+    const podcasts: PodcastInterface[] = list.map((podcasts: any) => {
       const {
         ['id']: {
           attributes: { ['im:id']: id },
@@ -111,5 +116,14 @@ export class PodcastsService {
     });
 
     return podcasts;
+  }
+
+  filterPodcastsListById(
+    podcasts: PodcastInterface[],
+    podcastId: number | string
+  ): PodcastInterface[] {
+    return podcasts.filter(
+      (podcast: PodcastInterface) => podcast.id == podcastId.toString()
+    );
   }
 }

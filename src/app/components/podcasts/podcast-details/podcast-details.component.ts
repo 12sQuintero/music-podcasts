@@ -24,22 +24,33 @@ export class PodcastDetailsComponent {
     this.route.params.subscribe((params) => {
       const { podcastId } = params;
       this.setPodcastInfo(podcastId);
+      this.setEpisodesInfo(podcastId);
     });
   }
   /**
    * set podcast data
    * @param id podcast id
    */
-  setPodcastInfo(id: string): void {
+  setEpisodesInfo(id: string): void {
     this.podcastService.getPodcastsDetails(id).subscribe({
       next: (resp: any) => {
-        const { podcast, episodes } = resp;
+        const { episodes } = resp;
 
-        this.podcast = podcast;
+        // this.podcast = podcast;
         this.episodes = episodes;
 
-        console.log('podcastInfo', this.podcast);
+        // console.log('podcastInfo', this.podcast);
         console.log('episodesInfo', this.episodes);
+      },
+    });
+  }
+
+  setPodcastInfo(podcastId: string): void {
+    this.podcastService.getPodcast(podcastId).subscribe({
+      next: (resp: PodcastInterface[]) => {
+        const [podcast] = resp;
+        this.podcast = podcast;
+        console.log('podcastInfo', resp);
       },
     });
   }
