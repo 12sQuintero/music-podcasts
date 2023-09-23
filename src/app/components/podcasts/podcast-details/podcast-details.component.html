@@ -40,40 +40,44 @@
     </div>
   </article>
   <div class="flex flex-wrap col-12 md:col-7">
-    <div class="flex pl-4 col-12 shadow-4 mb-3 justify-content-start">
-      <h2 class="font-semibold" >
-        Episodes: {{episodes.length}}
-      </h2>
-    </div>
-    <div class="flex flex-wrap col-12 shadow-4 justify-content-start">
-      <p-table [value]="episodes" class="w-full" [scrollable]="true" scrollHeight="50vh">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Duration</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-episode>
-          <tr>
-            <td>
-              <a>
-                {{ episode.trackName }}
-              </a>
-            </td>
-            <td>{{ episode.releaseDate | date:'dd/MM/yyyy' }}</td>
-            <td>{{ episode.trackTimeMillis | date:'mm:ss' }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
 
-    </div>
+    <router-outlet *ngIf="episodeSelected;else episodeList">
+    </router-outlet>
+    <ng-template #episodeList>
+      <div class="flex pl-4 col-12 shadow-4 mb-3 justify-content-start">
+        <h2 class="font-semibold">
+          Episodes: {{episodes.length}}
+        </h2>
+      </div>
+      <div class="flex flex-wrap col-12 shadow-4 justify-content-start">
+
+        <p-table [value]="episodes" class="w-full" [scrollable]="true" scrollHeight="50vh">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Duration</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-episode>
+            <tr>
+              <td>
+                <a [routerLink]="['episode',episode.trackId]">
+                  {{ episode.trackName }}
+                </a>
+              </td>
+              <td>{{ episode.releaseDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ episode.trackTimeMillis | date:'mm:ss' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+
+      </div>
+    </ng-template>
+
   </div>
 
 
 
 </div>
-
-
-<router-outlet>
-</router-outlet>

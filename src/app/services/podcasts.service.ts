@@ -36,7 +36,7 @@ export class PodcastsService {
 
   getPodcastsDetails(
     podcastId: string
-  ): Observable<{ episodes: EpisodeDetailInterface }> {
+  ): Observable<{ episodes: EpisodeDetailInterface[] }> {
     const detailsCache = this.cacheService.getDetailsCache(podcastId);
 
     //not cacheded-details
@@ -61,7 +61,7 @@ export class PodcastsService {
   }
 
   private requestHttPodcastsDetails(id: string): Observable<{
-    episodes: any;
+    episodes: EpisodeDetailInterface[];
   }> {
     return this.http
       .get(
@@ -85,9 +85,22 @@ export class PodcastsService {
             episodes,
           });
 
-          return {episodes};
+          return { episodes };
         })
       );
+  }
+
+  getEpisodeDetails(
+    podcastId: string,
+    episodeId: number
+  ): Observable<EpisodeDetailInterface> {
+    return this.getPodcastsDetails(podcastId).pipe(
+      map((podcasts: any) =>
+        podcasts.episodes.find(
+          (ep: EpisodeDetailInterface) => (ep.trackId = episodeId)
+        )
+      )
+    );
   }
 
   private parsePodcasts(list: any, podcastId?: string): any {

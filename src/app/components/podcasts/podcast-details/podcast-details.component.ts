@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
+import { filter } from 'rxjs';
 import {
   EpisodeDetailInterface,
   PodcastInterface,
@@ -12,13 +18,15 @@ import { PodcastsService } from 'src/app/services/podcasts.service';
   styleUrls: ['./podcast-details.component.scss'],
 })
 export class PodcastDetailsComponent {
-  constructor(
-    public route: ActivatedRoute,
-    private podcastService: PodcastsService
-  ) {}
-
   podcast?: any;
   episodes?: EpisodeDetailInterface[];
+  episodeSelected: boolean = false;
+
+  constructor(
+    public route: ActivatedRoute,
+    private podcastService: PodcastsService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -26,6 +34,17 @@ export class PodcastDetailsComponent {
       this.setPodcastInfo(podcastId);
       this.setEpisodesInfo(podcastId);
     });
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const { type } = event;
+        if (type == 1) {
+          this.episodeSelected = this.router.url.includes('episode');
+        }
+
+        // Aquí puedes realizar acciones adicionales si lo deseas.
+      });
   }
   /**
    * set podcast data
