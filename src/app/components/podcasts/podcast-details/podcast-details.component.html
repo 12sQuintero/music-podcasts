@@ -4,14 +4,14 @@
   <!-- ======================================================================= -->
   <article class="flex col-12 md:col-4 ">
     <div class="flex flex-wrap col-12 shadow-4 justify-content-center">
-      <div class="flex col justify-content-center">
+      <div [routerLink]="['podcast',podcast.trackId]" class="flex col justify-content-center">
         <img [src]="podcast.image" class="border-round " width="170">
       </div>
       <p-divider class="w-full"></p-divider>
       <!-- ================================================================= -->
       <!-- TITLE -->
       <!-- ================================================================= -->
-      <div class="flex flex-wrap col-12 pl-3">
+      <div [routerLink]="['podcast',podcast.trackId]" class="flex flex-wrap col-12 pl-3">
         <div class="flex col-12 p-0">
           <h3 class="m-0 ">{{podcast.name | uppercase}}</h3>
         </div>

@@ -31,20 +31,14 @@ export class PodcastDetailsComponent {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const { podcastId } = params;
-      this.setPodcastInfo(podcastId);
-      this.setEpisodesInfo(podcastId);
+        this.setPodcastInfo(podcastId);
+        this.setEpisodesInfo(podcastId);
     });
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        const { type } = event;
-        if (type == 1) {
-          this.episodeSelected = this.router.url.includes('episode');
-        }
+    this.router.events.subscribe(() => {
+      this.episodeSelected = this.router.url.includes('episode');
+    });
 
-        // Aquí puedes realizar acciones adicionales si lo deseas.
-      });
   }
   /**
    * set podcast data

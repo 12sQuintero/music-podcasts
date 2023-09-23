@@ -1,1 +1,12 @@
-<p> {{episode?.description}}</p>
+<div class="flex flex-wrap col-12 p-4 shadow-4 justify-content-start">
+  <h2 class="font-semibold m-0">
+    {{episode?.trackName}}
+  </h2>
+  <p [innerText]="episode?.description"> </p>
+
+  <audio class="mt-2 w-full" controls>
+    <source [src]="episode?.previewUrl" type="audio/mp3">
+    Your browser does not support the audio tag.
+  </audio>
+
+</div>
