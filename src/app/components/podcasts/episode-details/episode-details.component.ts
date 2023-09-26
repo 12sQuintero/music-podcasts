@@ -27,7 +27,6 @@ export class EpisodeDetailsComponent {
   setEpisodeDetails(podcastId: string, episodeId: number): void {
     this.podcastService.getEpisodeDetails(podcastId, episodeId).subscribe({
       next: (resp: any) => {
-        console.log('details episode', resp);
         this.episode = resp;
       },
     });

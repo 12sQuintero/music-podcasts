@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PodcastInterface } from 'src/app/interfaces/podcast';
 import { PodcastsService } from 'src/app/services/podcasts.service';
 
 @Component({
@@ -7,16 +8,13 @@ import { PodcastsService } from 'src/app/services/podcasts.service';
   styleUrls: ['./podcasts.component.scss'],
 })
 export class PodcastsComponent implements OnInit {
-  podcasts: any = [];
+  podcasts: PodcastInterface[] = [];
 
   constructor(private podcastService: PodcastsService) {}
 
   ngOnInit(): void {
     this.podcastService.podcasts.subscribe((value: any) => {
       this.podcasts = value;
-
-      console.log('values', value);
-      // this.cacheService.setCacheData(value);
     });
   }
 }

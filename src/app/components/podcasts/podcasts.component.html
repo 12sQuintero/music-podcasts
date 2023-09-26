@@ -12,6 +12,10 @@
 <!-- podcasts list -->
 <!-- ======================================================================= -->
 <div class="flex flex-wrap col justify-content-center align-items-start podcasts">
+  <div *ngIf="!podcasts.length" class="flex col justify-content-center">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
   <div *ngFor="let podcast of podcasts|podcastsFilter:filter.value"
     class="flex flex-wrap col-12 sm:col-6 md:col-4 lg:col-3 justify-content-center">
 
