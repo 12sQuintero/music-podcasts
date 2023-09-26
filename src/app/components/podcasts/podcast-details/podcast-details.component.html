@@ -1,3 +1,8 @@
+<div *ngIf="loading" class="flex col justify-content-center">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+
 <div *ngIf="podcast && episodes" class="flex flex-wrap col justify-content-between align-items-start">
   <!-- ======================================================================= -->
   <!-- podcast info -->
@@ -70,6 +75,11 @@
               <td>{{ episode.trackTimeMillis | date:'mm:ss' }}</td>
             </tr>
           </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3">No episodes found.</td>
+              </tr>
+            </ng-template>
         </p-table>
 
 

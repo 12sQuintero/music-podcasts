@@ -5,6 +5,6 @@
     </h1>
   </ng-template>
   <ng-template pTemplate="end">
-    <!-- todo: blue event dot -->
+    <div class="indicator" [ngClass]="{'visible': indicatorVisible}"></div>
   </ng-template>
 </p-menubar>

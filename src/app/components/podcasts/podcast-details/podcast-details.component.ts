@@ -1,11 +1,5 @@
-import { Component } from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  NavigationStart,
-  Router,
-} from '@angular/router';
-import { filter } from 'rxjs';
+import { Component, booleanAttribute, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   EpisodeDetailInterface,
   PodcastInterface,
@@ -18,9 +12,11 @@ import { PodcastsService } from 'src/app/services/podcasts.service';
   styleUrls: ['./podcast-details.component.scss'],
 })
 export class PodcastDetailsComponent {
-  podcast?: any;
+  podcast?: PodcastInterface;
   episodes?: EpisodeDetailInterface[];
   episodeSelected: boolean = false;
+
+  loading: boolean = false;
 
   constructor(
     public route: ActivatedRoute,
@@ -29,12 +25,13 @@ export class PodcastDetailsComponent {
   ) {}
 
   ngOnInit() {
+    //getting ids from url
     this.route.params.subscribe((params) => {
       const { podcastId } = params;
       this.setPodcastInfo(podcastId);
       this.setEpisodesInfo(podcastId);
     });
-
+    //checking if there are some episode include to show list or details
     this.router.events.subscribe(() => {
       this.episodeSelected = this.router.url.includes('episode');
     });
@@ -46,22 +43,33 @@ export class PodcastDetailsComponent {
   setEpisodesInfo(id: string): void {
     this.podcastService.getPodcastsDetails(id).subscribe({
       next: (resp: any) => {
+        console.log('episodes', resp);
+
         const { episodes } = resp;
-
-        // this.podcast = podcast;
         this.episodes = episodes;
-
-        // console.log('podcastInfo', this.podcast);
+        this.isLoading();
+      },
+    });
+  }
+  /**
+   * setting podcast info
+   * @param podcastId podcast id
+   */
+  setPodcastInfo(podcastId: string): void {
+    this.podcastService.getPodcast(podcastId).subscribe({
+      next: (resp: PodcastInterface[]) => {
+        console.log('podcast info', resp);
+        const [podcast] = resp;
+        this.podcast = podcast;
+        this.isLoading();
       },
     });
   }
 
-  setPodcastInfo(podcastId: string): void {
-    this.podcastService.getPodcast(podcastId).subscribe({
-      next: (resp: PodcastInterface[]) => {
-        const [podcast] = resp;
-        this.podcast = podcast;
-      },
-    });
+  /**
+   * check loading
+   */
+  isLoading(): void {
+    this.loading = !booleanAttribute(this.episodes && this.podcast);
   }
 }
