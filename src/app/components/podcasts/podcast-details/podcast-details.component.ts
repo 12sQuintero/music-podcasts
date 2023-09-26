@@ -31,14 +31,13 @@ export class PodcastDetailsComponent {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const { podcastId } = params;
-        this.setPodcastInfo(podcastId);
-        this.setEpisodesInfo(podcastId);
+      this.setPodcastInfo(podcastId);
+      this.setEpisodesInfo(podcastId);
     });
 
     this.router.events.subscribe(() => {
       this.episodeSelected = this.router.url.includes('episode');
     });
-
   }
   /**
    * set podcast data
@@ -53,7 +52,6 @@ export class PodcastDetailsComponent {
         this.episodes = episodes;
 
         // console.log('podcastInfo', this.podcast);
-        console.log('episodesInfo', this.episodes);
       },
     });
   }
@@ -63,7 +61,6 @@ export class PodcastDetailsComponent {
       next: (resp: PodcastInterface[]) => {
         const [podcast] = resp;
         this.podcast = podcast;
-        console.log('podcastInfo', resp);
       },
     });
   }

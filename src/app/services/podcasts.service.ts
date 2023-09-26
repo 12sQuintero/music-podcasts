@@ -61,6 +61,7 @@ export class PodcastsService {
   }
 
   private requestHttPodcastsDetails(id: string): Observable<{
+    podcast: PodcastInterface;
     episodes: EpisodeDetailInterface[];
   }> {
     return this.http
@@ -85,7 +86,7 @@ export class PodcastsService {
             episodes,
           });
 
-          return { episodes };
+          return { podcast, episodes };
         })
       );
   }
@@ -95,11 +96,11 @@ export class PodcastsService {
     episodeId: number
   ): Observable<EpisodeDetailInterface> {
     return this.getPodcastsDetails(podcastId).pipe(
-      map((podcasts: any) =>
-        podcasts.episodes.find(
-          (ep: EpisodeDetailInterface) => (ep.trackId = episodeId)
-        )
-      )
+      map(({ episodes }: any) => {
+        return episodes.find(
+          (ep: EpisodeDetailInterface) => (ep.trackId == episodeId)
+        );
+      })
     );
   }
 
